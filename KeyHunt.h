@@ -79,7 +79,7 @@ public:
 	KeyHunt(std::string addressFile, std::vector<unsigned char> addressHash, int searchMode, bool useGpu,
 		std::string outputFile, bool useSSE, uint32_t maxFound, std::string rangeStart, std::string rangeEnd, bool& should_exit);
 	~KeyHunt();
-	void Search(int nbThread, std::vector<int>& gpuId, std::vector<int>& gridSize, bool& should_exit);
+	void Search(int nbThread, std::vector<int> gpuId, std::vector<int> gridSize, bool& should_exit);
 	void FindKeyGPU(TH_PARAM* p);
 	void FindKeyCPU(TH_PARAM* p);
 
@@ -92,20 +92,44 @@ private:
 	bool MatchHash160(uint32_t* _h);
 	std::string formatThousands(uint64_t x);
 	char* toTimeStr(int sec, char* timeStr);
+	uint64_t getCPUCount();
+	void SetupRanges(uint32_t totalThreads);
+	std::string GetHex(std::vector<unsigned char>& buffer);
+	int CheckBloomBinary(const uint8_t* hash);
 
+	// Range variables
 	Int rangeStart;
 	Int rangeEnd;
 	Int rangeSize;
+
+	// Hash and counters
+	uint32_t hash160[5];
 	uint64_t counters[256];
 	uint64_t counters2[256];
+
+	// Bloom filter variables
 	bool* BloomTable;
 	uint64_t BLOOM_SIZE;
 	uint64_t BLOOM_BITS;
 	uint8_t BLOOM_HASHES;
 	uint8_t* DATA;
 	uint64_t TOTAL_ADDR;
+
+	// File and address handling
 	std::string addressFile;
 	std::vector<unsigned char> addressHash;
+	std::string outputFile;
+	FILE* rKey;
+
+	// Search configuration
+	int searchMode;
+	int searchType;
+	bool useGpu;
+	bool useSSE;
+	bool* endOfSearch;
+	uint32_t maxFound;
+	int nbGPUThread;
+	bool& should_exit;
 	int searchMode;
 	bool useGpu;
 	std::string outputFile;

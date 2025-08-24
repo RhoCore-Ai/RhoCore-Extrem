@@ -59,6 +59,16 @@ KeyHunt::KeyHunt(const std::string& addressFile, const std::vector<unsigned char
 	secp = new Secp256K1();
 	secp->Init();
 
+	// Initialize hash160 from addressHash for SINGLEMODE
+	if (this->addressMode == SINGLEMODE) {
+		for (int i = 0; i < 5; i++) {
+			hash160[i] = 0;
+		}
+		for (size_t i = 0; i < addressHash.size() && i < 20; i++) {
+			((uint8_t*)hash160)[i] = addressHash.at(i);
+		}
+	}
+
 	if (this->addressMode == FILEMODE) {
 
 		// load address file
@@ -1056,7 +1066,7 @@ std::string KeyHunt::formatThousands(uint64_t x)
 {
 	char buf[32] = "";
 
-	sprintf(buf, "%llu", x);
+	sprintf(buf, "%lu", x);
 
 	std::string s(buf);
 
