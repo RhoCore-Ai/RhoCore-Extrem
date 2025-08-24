@@ -40,19 +40,16 @@
 #define P2SH 1
 #define BECH32 2
 
-// File modes
-#define FILEMODE 0
-#define SINGLEMODE 1
-
 // CPU Group Size (must match GPU GRP_SIZE)
 #define CPU_GRP_SIZE 1024
-#define STEP_SIZE 1024
 
 // Thread parameters structure
 typedef struct {
   int  threadId;
   int  gridSizeX;
   int  gridSizeY;
+class KeyHunt;  // Forward declaration
+
   int  gpuId;
   bool isAlive;
   bool hasStarted;
@@ -103,11 +100,6 @@ public:
 	// Add missing public methods that are being called
 	void checkAddresses(bool compressed, Int key, int i, Point p1);
 	void checkAddresses2(bool compressed, Int key, int i, Point p1);
-	void checkAddressesSSE(bool compressed, Int key, int i, Point p1, Point p2, Point p3, Point p4);
-	void checkAddressesSSE2(bool compressed, Int key, int i, Point p1, Point p2, Point p3, Point p4);
-	void getCPUStartingKey(int thId, Int & tRangeStart, Int & key, Point & startP);
-	void getGPUStartingKeys(int thId, Int & tRangeStart, Int & tRangeEnd, int groupSize, int nbThread, Int * keys, Point * p);
-	bool checkPrivKey(string addr, Int& key, int32_t incr, bool mode);
 	bool isAlive(TH_PARAM* p);
 	bool hasStarted(TH_PARAM* p);
 	uint64_t getCPUCount();
@@ -122,20 +114,14 @@ private:
 	bool MatchHash160(uint32_t* _h);
 	std::string formatThousands(uint64_t x);
 	char* toTimeStr(int sec, char* timeStr);
-	uint64_t getCPUCount();
-	uint64_t getGPUCount();
-	bool isAlive(TH_PARAM* p);
-	bool hasStarted(TH_PARAM* p);
-	std::string GetHex(std::vector<unsigned char>& buffer);
-	int CheckBloomBinary(const uint8_t* hash);
-	void SetupRanges(uint32_t totalThreads);
-
 	// Range variables
 	Int rangeStart;
 	Int rangeEnd;
 	Int rangeSize;
 	Int rangeDiff;
 	Int rangeDiff2;
+
+
 	uint32_t hash160[5];
 	uint64_t counters[256];
 	uint64_t counters2[256];

@@ -253,7 +253,7 @@ void KeyHunt::output(string addr, string pAddr, string pAddrHex)
 
 // ----------------------------------------------------------------------------
 
-bool KeyHunt::checkPrivKey(string addr, Int& key, int32_t incr, bool mode)
+bool KeyHunt::checkPrivKey(std::string addr, Int& key, int32_t incr, bool mode)
 {
 
 	Int k(&key);
@@ -263,7 +263,7 @@ bool KeyHunt::checkPrivKey(string addr, Int& key, int32_t incr, bool mode)
 	// Check addresses
 	Point p = secp->ComputePublicKey(&k);
 
-	string chkAddr = secp->GetAddress(searchType, mode, p);
+	std::string chkAddr = secp->GetAddress(searchType, mode, p);
 	if (chkAddr != addr) {
 
 		//Key may be the opposite one (negative zero or compressed key)
@@ -271,7 +271,7 @@ bool KeyHunt::checkPrivKey(string addr, Int& key, int32_t incr, bool mode)
 		k.Add(&secp->order);
 		p = secp->ComputePublicKey(&k);
 
-		string chkAddr = secp->GetAddress(searchType, mode, p);
+		std::string chkAddr = secp->GetAddress(searchType, mode, p);
 		if (chkAddr != addr) {
 			printf("\nWarning, wrong private key generated !\n");
 			printf("  Addr :%s\n", addr.c_str());
