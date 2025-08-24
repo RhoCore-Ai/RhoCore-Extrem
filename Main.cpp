@@ -29,6 +29,11 @@
 #include <unistd.h>
 #endif
 
+#ifdef WITHGPU
+#include <cuda.h>
+#include <cuda_runtime.h>
+#endif
+
 #define RELEASE "1.00"
 
 using namespace std;
