@@ -32,6 +32,9 @@
 // Address types
 #define P2PKH 0
 
+// CPU Group Size (must match GPU GRP_SIZE)
+#define CPU_GRP_SIZE 1024
+
 // Thread parameters structure
 typedef struct {
   int  threadId;

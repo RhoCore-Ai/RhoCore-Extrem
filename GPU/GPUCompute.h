@@ -1,6 +1,6 @@
 /*
- * This file is part of the VanitySearch distribution (https://github.com/JeanLucPons/VanitySearch).
- * Copyright (c) 2019 Jean Luc PONS.
+ * This file is part of the Rhocore-extrem distribution.
+ * Copyright (c) 2024 Thomas Baumann.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -13,14 +13,14 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 
 #include <device_atomic_functions.h>
 #include <device_functions.h>
 
 /*
- * This file is part of the VanitySearch distribution (https://github.com/JeanLucPons/VanitySearch).
- * Copyright (c) 2019 Jean Luc PONS.
+ * This file is part of the Rhocore-extrem distribution.
+ * Copyright (c) 2024 Thomas Baumann.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

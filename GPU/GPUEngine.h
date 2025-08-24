@@ -38,11 +38,8 @@ static const char* searchModes[] = { "Compressed", "Uncompressed", "Compressed o
 #define STEP_SIZE 2048
 
 // Number of thread per block (optimized for RTX 4090)
-#ifdef CUDA_12_OR_LATER
-#define GRP_SIZE 256
-#else
-#define GRP_SIZE 128
-#endif
+// Set to 1024 to match GPUGroup.h
+#define GRP_SIZE 1024
 
 // Item size for found keys
 #define ITEM_SIZE 28
