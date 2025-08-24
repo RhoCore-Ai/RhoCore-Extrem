@@ -91,7 +91,7 @@ class KeyHunt {
 
 public:
 	KeyHunt(const std::string& addressFile, const std::vector<unsigned char>& addressHash, int searchMode, bool useGpu,
-		const std::string& outputFile, bool useSSE, uint32_t maxFound, const std::string& rangeStart, const std::string& rangeEnd, bool& shouldExit);
+		const std::string& outputFile, bool useSSE, uint32_t maxFound, const std::string& rangeStart, const std::string& rangeEnd, bool& should_exit);
 	~KeyHunt();
 	void Search(int nbThread, std::vector<int> gpuId, std::vector<int> gridSize, bool& should_exit);
 	void FindKeyGPU(TH_PARAM* p);
