@@ -995,7 +995,7 @@ void KeyHunt::Search(int nbThread, std::vector<int> gpuId, std::vector<int> grid
 
 		if (isAlive(params)) {
 			memset(timeStr, '\0', 256);
-			printf("\r[%s] [CPU+GPU: %.2f Mk/s] [GPU: %.2f Mk/s] [C: %d%%] [T: %s (%d bit)] [F: %d]  ",
+			printf("\r[%s] [CPU+GPU: %.2f Mk/s] [GPU: %.2f Mk/s] [C: %d%%] [T: %s (%d bit)] [F: %lu]  ",
 				toTimeStr(t1, timeStr),
 				avgKeyRate / 1000000.0,
 				avgGpuKeyRate / 1000000.0,
@@ -1018,9 +1018,9 @@ void KeyHunt::Search(int nbThread, std::vector<int> gpuId, std::vector<int> grid
 
 // ----------------------------------------------------------------------------
 
-string KeyHunt::GetHex(vector<unsigned char> &buffer)
+std::string KeyHunt::GetHex(std::vector<unsigned char> &buffer)
 {
-	string ret;
+	std::string ret;
 
 	char tmp[128];
 	for (int i = 0; i < (int)buffer.size(); i++) {

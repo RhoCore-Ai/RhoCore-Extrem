@@ -44,12 +44,10 @@
 #define CPU_GRP_SIZE 1024
 
 // Thread parameters structure
-typedef struct {
+typedef struct TH_PARAM {
   int  threadId;
   int  gridSizeX;
   int  gridSizeY;
-class KeyHunt;  // Forward declaration
-
   int  gpuId;
   bool isAlive;
   bool hasStarted;
@@ -63,7 +61,14 @@ class KeyHunt;  // Forward declaration
   Int rangeEnd;
   uint64_t keysSearched;
   uint64_t keysFound;
-  uint32_t collisionOffset;
+  KeyHunt* obj;
+  uint32_t collisionSize;
+  uint32_t collisionSize2;
+  uint32_t collisionSize3;
+  uint32_t collisionSize4;
+  uint32_t collisionSize5;
+  uint32_t collisionSize6;
+} TH_PARAM;
   uint32_t collisionSize;
   uint32_t collisionSize2;
   uint32_t collisionSize3;
@@ -90,26 +95,32 @@ class KeyHunt;  // Forward declaration
 class KeyHunt {
 
 public:
-	KeyHunt(std::string addressFile, std::vector<unsigned char> addressHash, int searchMode, bool useGpu,
+	KeyHunt(std::string addressFile, std::vector<std::string> addressHash, int searchMode, bool useGpu,
 		std::string outputFile, bool useSSE, uint32_t maxFound, std::string rangeStart, std::string rangeEnd, bool& should_exit);
 	~KeyHunt();
 	void Search(int nbThread, std::vector<int> gpuId, std::vector<int> gridSize, bool& should_exit);
 	void FindKeyGPU(TH_PARAM* p);
 	void FindKeyCPU(TH_PARAM* p);
 
-	// Add missing public methods that are being called
+	// Public methods
 	void checkAddresses(bool compressed, Int key, int i, Point p1);
 	void checkAddresses2(bool compressed, Int key, int i, Point p1);
-	bool isAlive(TH_PARAM* p);
-	bool hasStarted(TH_PARAM* p);
-	uint64_t getCPUCount();
-	uint64_t getGPUCount();
-
+	void checkAddressesSSE(bool compressed, Int key, int i, Point p1, Point p2, Point p3, Point p4);
+	void checkAddressesSSE2(bool compressed, Int key, int i, Point p1, Point p2, Point p3, Point p4);
+	void getCPUStartingKey(int thId, Int & tRangeStart, Int & key, Point & startP);
+	void getGPUStartingKeys(int thId, Int & tRangeStart, Int & tRangeEnd, int groupSize, int nbThread, Int * keys, Point * p);
+	bool checkPrivKey(std::string addr, Int& key, int32_t incr, bool mode);
+	void SetupRanges(uint32_t totalThreads);
+	std::string GetHex(std::vector<unsigned char>& buffer);
 private:
 	void CheckAddresses(bool compressed, Int key, Point& pubkey);
 	void CheckAddressesSSE(bool compressed, Int key, Point& pubkey);
 	bool CheckPublicAddress(bool compressed, std::string address);
 	void output(std::string addr, std::string pAddr, std::string pvcKey);
+	bool isInsideRange(Int& key);
+	bool MatchHash160(uint32_t* _h);
+	std::string formatThousands(uint64_t x);
+	char* toTimeStr(int sec, char* timeStr);
 	bool isInsideRange(Int& key);
 	bool MatchHash160(uint32_t* _h);
 	std::string formatThousands(uint64_t x);
@@ -135,6 +146,48 @@ private:
 	uint8_t* DATA;
 	uint64_t TOTAL_ADDR;
 	Bloom* bloom;
+
+	// Thread parameters structure
+	typedef struct TH_PARAM {
+		int  threadId;
+		int  gridSizeX;
+		int  gridSizeY;
+		int  gpuId;
+		bool isAlive;
+		bool hasStarted;
+		bool isRunning;
+		bool completed;
+		uint64_t startKey;
+		uint64_t endKey;
+		uint64_t keysPerThread;
+		uint64_t keysToSearch;
+		Int rangeStart;
+		Int rangeEnd;
+		uint64_t keysSearched;
+		uint64_t keysFound;
+		uint32_t collisionOffset;
+		uint32_t collisionSize;
+		uint32_t collisionSize2;
+		uint32_t collisionSize3;
+		uint32_t collisionSize4;
+		uint32_t collisionSize5;
+		uint32_t collisionSize6;
+		uint32_t collisionSize7;
+		uint32_t collisionSize8;
+		uint32_t collisionSize9;
+		uint32_t collisionSize10;
+		uint32_t collisionSize11;
+		uint32_t collisionSize12;
+		uint32_t collisionSize13;
+		uint32_t collisionSize14;
+		uint32_t collisionSize15;
+		uint32_t collisionSize16;
+		uint32_t collisionSize17;
+		uint32_t collisionSize18;
+		uint32_t collisionSize19;
+		uint32_t collisionSize20;
+		KeyHunt* obj;
+	} TH_PARAM;
 
 	// File and address handling
 	std::string addressFile;
