@@ -103,7 +103,7 @@ private:
 	uint64_t getGPUCount();
 	bool isAlive(TH_PARAM* p);
 	bool hasStarted(TH_PARAM* p);
-	std::string GetHex(std::vector<uint8_t>& buffer);
+	std::string GetHex(std::vector<unsigned char>& buffer);
 	int CheckBloomBinary(const uint8_t* hash);
 	void SetupRanges(uint32_t totalThreads);
 
