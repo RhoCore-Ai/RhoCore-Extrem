@@ -173,8 +173,8 @@ KeyHunt::~KeyHunt()
 	delete secp;
 	if (this->addressMode == FILEMODE)
 		delete bloom;
-	if (DATA)
-		free(DATA);
+	if (!DATA.empty())
+		DATA.clear();
 }
 
 // ----------------------------------------------------------------------------
@@ -696,7 +696,7 @@ void KeyHunt::FindKeyGPU(TH_PARAM * ph)
 
 	if (addressMode == FILEMODE) {
 		g = new GPUEngine(ph->gridSizeX, ph->gridSizeY, ph->gpuId, maxFound, BLOOM_N, bloom->get_bits(),
-			bloom->get_hashes(), bloom->get_bf(), DATA, TOTAL_ADDR);
+			bloom->get_hashes(), bloom->get_bf(), DATA.data(), TOTAL_ADDR);
 	}
 	else {
 		g = new GPUEngine(ph->gridSizeX, ph->gridSizeY, ph->gpuId, maxFound, hash160);
@@ -1036,7 +1036,7 @@ int KeyHunt::CheckBloomBinary(const uint8_t * hash)
 		half = TOTAL_ADDR;
 		while (!r && half >= 1) {
 			half = (max - min) / 2;
-			temp_read = DATA + ((current + half) * 20);
+			temp_read = DATA.data() + ((current + half) * 20);
 			rcmp = memcmp(hash, temp_read, 20);
 			if (rcmp == 0) {
 				r = 1;  //Found!!

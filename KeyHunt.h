@@ -90,8 +90,8 @@ typedef struct TH_PARAM {
 class KeyHunt {
 
 public:
-	KeyHunt(std::string addressFile, std::vector<unsigned char> addressHash, int searchMode, bool useGpu,
-		std::string outputFile, bool useSSE, uint32_t maxFound, std::string rangeStart, std::string rangeEnd, bool& should_exit);
+	KeyHunt(const std::string& addressFile, const std::vector<unsigned char>& addressHash, int searchMode, bool useGpu,
+		const std::string& outputFile, bool useSSE, uint32_t maxFound, const std::string& rangeStart, const std::string& rangeEnd, bool& shouldExit);
 	~KeyHunt();
 	void Search(int nbThread, std::vector<int> gpuId, std::vector<int> gridSize, bool& should_exit);
 	void FindKeyGPU(TH_PARAM* p);
