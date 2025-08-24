@@ -28,7 +28,7 @@
 #include "Int.h"
 #include "IntGroup.h"
 #include "Bloom.h"
-#include "SECP256K1.h"
+#include "SECP256k1.h"
 
 // Search modes
 #define SEARCH_COMPRESSED 0
