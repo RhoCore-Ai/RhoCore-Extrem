@@ -6,6 +6,7 @@
 #include "IntGroup.h"
 #include "Timer.h"
 #include "hash/ripemd160.h"
+#include "Bloom.h"
 #include <cstring>
 #include <cmath>
 #include <algorithm>
@@ -68,6 +69,9 @@ KeyHunt::KeyHunt(const std::string& addressFile, const std::vector<unsigned char
 			((uint8_t*)hash160)[i] = addressHash.at(i);
 		}
 	}
+
+	// Initialize mutex
+	ghMutex = PTHREAD_MUTEX_INITIALIZER;
 
 	if (this->addressMode == FILEMODE) {
 
@@ -802,17 +806,54 @@ uint64_t KeyHunt::getGPUCount()
 
 uint64_t KeyHunt::getCPUCount()
 {
-
 	uint64_t count = 0;
 	for (int i = 0; i < nbCPUThread; i++)
 		count += counters[i];
 	return count;
+}
 
+uint64_t KeyHunt::getGPUCount()
+{
+	uint64_t count = 0;
+	for (int i = 0; i < nbGPUThread; i++)
+		count += counters[0x80L + i];
+	return count;
 }
 
 // ----------------------------------------------------------------------------
 
 void KeyHunt::SetupRanges(uint32_t totalThreads)
+{
+	Int threads;
+	threads.SetInt32(totalThreads);
+	rangeDiff.Set(&rangeEnd);
+	rangeDiff.Sub(&rangeStart);
+	rangeDiff.Div(&threads);
+}
+
+bool KeyHunt::hasStarted(TH_PARAM* p)
+{
+	bool started = true;
+	for (int i = 0; i < nbCPUThread + nbGPUThread; i++) {
+		if (!p[i].hasStarted) {
+			started = false;
+			break;
+		}
+	}
+	return started;
+}
+
+bool KeyHunt::isAlive(TH_PARAM* p)
+{
+	bool alive = false;
+	for (int i = 0; i < nbCPUThread + nbGPUThread; i++) {
+		if (p[i].isAlive) {
+			alive = true;
+			break;
+		}
+	}
+	return alive;
+}
 {
 	Int threads;
 	threads.SetInt32(totalThreads);

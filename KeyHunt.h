@@ -48,6 +48,8 @@ typedef struct {
   uint64_t endKey;
   uint64_t keysPerThread;
   uint64_t keysToSearch;
+  Int rangeStart;
+  Int rangeEnd;
   uint64_t keysSearched;
   uint64_t keysFound;
   uint32_t collisionOffset;
@@ -93,6 +95,11 @@ private:
 	std::string formatThousands(uint64_t x);
 	char* toTimeStr(int sec, char* timeStr);
 	uint64_t getCPUCount();
+	uint64_t getGPUCount();
+	bool isAlive(TH_PARAM* p);
+	bool hasStarted(TH_PARAM* p);
+	std::string GetHex(std::vector<unsigned char>& buffer);
+	int CheckBloomBinary(const uint8_t* hash);
 	void SetupRanges(uint32_t totalThreads);
 	std::string GetHex(std::vector<std::uint8_t>& buffer);
 	int CheckBloomBinary(const uint8_t* hash);
@@ -101,16 +108,45 @@ private:
 	Int rangeStart;
 	Int rangeEnd;
 	Int rangeSize;
+	Int rangeDiff;
+	Int rangeDiff2;
 
 	// Hash and counters
 	uint32_t hash160[5];
 	uint64_t counters[256];
 	uint64_t counters2[256];
 
-	// Bloom filter variables
-	bool* BloomTable;
-	uint64_t BLOOM_SIZE;
-	uint64_t BLOOM_BITS;
+	// Search configuration
+	int searchMode;
+	int searchType;
+	bool useGpu;
+	bool useSSE;
+	bool endOfSearch;
+	uint32_t maxFound;
+	int nbGPUThread;
+	bool& should_exit;
+	Bloom* bloom;
+
+	// File and address handling
+	std::string addressFile;
+	std::vector<unsigned char> addressHash;
+	int addressMode;
+	std::string outputFile;
+	FILE* rKey;
+
+	// Search configuration
+	int searchMode;
+	int searchType;
+	bool useGpu;
+	bool useSSE;
+	bool* endOfSearch;
+	uint32_t maxFound;
+	int nbGPUThread;
+	bool& should_exit;
+
+	// Threading and timing
+	pthread_mutex_t ghMutex;
+	double startTime;
 	uint8_t BLOOM_HASHES;
 	uint8_t* DATA;
 	uint64_t TOTAL_ADDR;
