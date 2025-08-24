@@ -44,50 +44,6 @@
 #define CPU_GRP_SIZE 1024
 
 // Thread parameters structure
-typedef struct TH_PARAM {
-  int  threadId;
-  int  gridSizeX;
-  int  gridSizeY;
-  int  gpuId;
-  bool isAlive;
-  bool hasStarted;
-  bool isRunning;
-  bool completed;
-  uint64_t startKey;
-  uint64_t endKey;
-  uint64_t keysPerThread;
-  uint64_t keysToSearch;
-  Int rangeStart;
-  Int rangeEnd;
-  uint64_t keysSearched;
-  uint64_t keysFound;
-  KeyHunt* obj;
-  uint32_t collisionSize;
-  uint32_t collisionSize2;
-  uint32_t collisionSize3;
-  uint32_t collisionSize4;
-  uint32_t collisionSize5;
-  uint32_t collisionSize6;
-} TH_PARAM;
-  uint32_t collisionSize;
-  uint32_t collisionSize2;
-  uint32_t collisionSize3;
-  uint32_t collisionSize4;
-  uint32_t collisionSize5;
-  uint32_t collisionSize6;
-  uint32_t collisionSize7;
-  uint32_t collisionSize8;
-  uint32_t collisionSize9;
-  uint32_t collisionSize10;
-  uint32_t collisionSize11;
-  uint32_t collisionSize12;
-  uint32_t collisionSize13;
-  uint32_t collisionSize14;
-  uint32_t collisionSize15;
-  uint32_t collisionSize16;
-  uint32_t collisionSize17;
-  uint32_t collisionSize18;
-// Thread parameters structure
 class KeyHunt;  // Forward declaration
 
 typedef struct TH_PARAM {
@@ -134,7 +90,7 @@ typedef struct TH_PARAM {
 class KeyHunt {
 
 public:
-	KeyHunt(std::string addressFile, std::vector<std::string> addressHash, int searchMode, bool useGpu,
+	KeyHunt(std::string addressFile, std::vector<unsigned char> addressHash, int searchMode, bool useGpu,
 		std::string outputFile, bool useSSE, uint32_t maxFound, std::string rangeStart, std::string rangeEnd, bool& should_exit);
 	~KeyHunt();
 	void Search(int nbThread, std::vector<int> gpuId, std::vector<int> gridSize, bool& should_exit);
@@ -151,6 +107,11 @@ public:
 	bool checkPrivKey(std::string addr, Int& key, int32_t incr, bool mode);
 	void SetupRanges(uint32_t totalThreads);
 	std::string GetHex(std::vector<unsigned char>& buffer);
+	int CheckBloomBinary(const uint8_t* hash);
+	bool isAlive(TH_PARAM* p);
+	bool hasStarted(TH_PARAM* p);
+	uint64_t getCPUCount();
+	uint64_t getGPUCount();
 private:
 	void CheckAddresses(bool compressed, Int key, Point& pubkey);
 	void CheckAddressesSSE(bool compressed, Int key, Point& pubkey);
@@ -179,7 +140,7 @@ private:
 	uint64_t BLOOM_BITS;
 	uint64_t BLOOM_N;
 	uint8_t BLOOM_HASHES;
-	uint8_t* DATA;
+	std::vector<unsigned char> DATA;
 	uint64_t TOTAL_ADDR;
 	Bloom* bloom;
 
