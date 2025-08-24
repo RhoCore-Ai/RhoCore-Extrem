@@ -94,7 +94,7 @@ private:
 	char* toTimeStr(int sec, char* timeStr);
 	uint64_t getCPUCount();
 	void SetupRanges(uint32_t totalThreads);
-	std::string GetHex(std::vector<unsigned char>& buffer);
+	std::string GetHex(std::vector<std::uint8_t>& buffer);
 	int CheckBloomBinary(const uint8_t* hash);
 
 	// Range variables
@@ -128,16 +128,6 @@ private:
 	bool useSSE;
 	bool* endOfSearch;
 	uint32_t maxFound;
-	int nbGPUThread;
-	bool& should_exit;
-	int searchMode;
-	bool useGpu;
-	std::string outputFile;
-	FILE* rKey;
-	bool useSSE;
-	bool* endOfSearch;
-	uint32_t maxFound;
-	int searchType;
 	int nbGPUThread;
 	bool& should_exit;
 
