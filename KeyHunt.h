@@ -28,6 +28,7 @@
 #include "Int.h"
 #include "IntGroup.h"
 #include "Bloom.h"
+#include "SECP256K1.h"
 
 // Search modes
 #define SEARCH_COMPRESSED 0
@@ -36,9 +37,16 @@
 
 // Address types
 #define P2PKH 0
+#define P2SH 1
+#define BECH32 2
+
+// File modes
+#define FILEMODE 0
+#define SINGLEMODE 1
 
 // CPU Group Size (must match GPU GRP_SIZE)
 #define CPU_GRP_SIZE 1024
+#define STEP_SIZE 1024
 
 // Thread parameters structure
 typedef struct {
@@ -48,6 +56,7 @@ typedef struct {
   int  gpuId;
   bool isAlive;
   bool hasStarted;
+  bool isRunning;
   bool completed;
   uint64_t startKey;
   uint64_t endKey;
@@ -78,6 +87,7 @@ typedef struct {
   uint32_t collisionSize18;
   uint32_t collisionSize19;
   uint32_t collisionSize20;
+  KeyHunt* obj;
 } TH_PARAM;
 
 class KeyHunt {
@@ -89,6 +99,19 @@ public:
 	void Search(int nbThread, std::vector<int> gpuId, std::vector<int> gridSize, bool& should_exit);
 	void FindKeyGPU(TH_PARAM* p);
 	void FindKeyCPU(TH_PARAM* p);
+
+	// Add missing public methods that are being called
+	void checkAddresses(bool compressed, Int key, int i, Point p1);
+	void checkAddresses2(bool compressed, Int key, int i, Point p1);
+	void checkAddressesSSE(bool compressed, Int key, int i, Point p1, Point p2, Point p3, Point p4);
+	void checkAddressesSSE2(bool compressed, Int key, int i, Point p1, Point p2, Point p3, Point p4);
+	void getCPUStartingKey(int thId, Int & tRangeStart, Int & key, Point & startP);
+	void getGPUStartingKeys(int thId, Int & tRangeStart, Int & tRangeEnd, int groupSize, int nbThread, Int * keys, Point * p);
+	bool checkPrivKey(string addr, Int& key, int32_t incr, bool mode);
+	bool isAlive(TH_PARAM* p);
+	bool hasStarted(TH_PARAM* p);
+	uint64_t getCPUCount();
+	uint64_t getGPUCount();
 
 private:
 	void CheckAddresses(bool compressed, Int key, Point& pubkey);
@@ -121,6 +144,7 @@ private:
 	bool* BloomTable;
 	uint64_t BLOOM_SIZE;
 	uint64_t BLOOM_BITS;
+	uint64_t BLOOM_N;
 	uint8_t BLOOM_HASHES;
 	uint8_t* DATA;
 	uint64_t TOTAL_ADDR;
@@ -141,11 +165,16 @@ private:
 	bool endOfSearch;
 	uint32_t maxFound;
 	int nbGPUThread;
+	int nbCPUThread;
+	uint64_t nbFoundKey;
 	bool& should_exit;
 
 	// Threading and timing
 	pthread_mutex_t ghMutex;
 	double startTime;
+
+	// Secp256k1 instance
+	Secp256K1* secp;
 
 };
 
