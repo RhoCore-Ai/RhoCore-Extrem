@@ -1,0 +1,3 @@
+# Test file for Rhocore-extrem project
+
+This is a test file to verify that we can create and modify files in the project directory.

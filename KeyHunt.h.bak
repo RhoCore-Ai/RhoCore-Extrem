@@ -1,0 +1,63 @@
+#ifndef KEYHUNTH
+#define KEYHUNTH
+
+#include "GPU/GPUEngine.h"
+#include <vector>
+#include <string>
+// Include CUDA configuration
+#include "GPU/CudaConfig.h"
+
+#define P2PKH 0
+//#define P2SH 1
+//#define P2WPKH 2
+//#define P2WSH 3
+//#define P2SH_P2WPKH 4
+//#define P2SH_P2WSH 5
+
+#define SEARCH_COMPRESSED 0
+#define SEARCH_UNCOMPRESSED 1
+#define SEARCH_BOTH 2
+
+class KeyHunt {
+
+public:
+	KeyHunt(std::string hash160File, std::vector<unsigned char> hash160, int searchMode, bool gpuEnable,
+		std::string outputFile, bool useSSE, uint32_t maxFound, std::string rangeStart, std::string rangeEnd, bool& should_exit);
+	~KeyHunt();
+	void Search(int nbThread, std::vector<int>& gpuId, std::vector<int>& gridSize, bool& should_exit);
+	void FindKeyGPU(TH_PARAM* p);
+	void FindKeyCPU(TH_PARAM* p);
+
+private:
+	void CheckAddresses(bool compressed, Int key, Point& pubkey);
+	void CheckAddressesSSE(bool compressed, Int key, Point& pubkey);
+	bool CheckPublicAddress(bool compressed, std::string address);
+	void output(std::string addr, std::string pAddr, std::string pvcKey);
+	bool isInsideRange(Int& key);
+
+	IntRange* range;
+	uint64_t counters[256];
+	uint64_t counters2[256];
+	bool* BloomTable;
+	uint64_t BLOOM_SIZE;
+	uint64_t BLOOM_BITS;
+	uint8_t BLOOM_HASHES;
+	uint8_t* DATA;
+	uint64_t TOTAL_ADDR;
+	std::string hash160File;
+	std::vector<unsigned char> hash160;
+	int searchMode;
+	bool gpuEnable;
+	std::string outputFile;
+	FILE* rKey;
+	bool useSSE;
+	bool* endOfSearch;
+	uint32_t maxFound;
+	Int startRange;
+	Int endRange;
+	Int rangeSize;
+	bool& should_exit;
+
+};
+
+#endif // KEYHUNTH
