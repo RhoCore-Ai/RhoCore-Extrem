@@ -23,6 +23,11 @@
 #include <string>
 // Include CUDA configuration
 #include "GPU/CudaConfig.h"
+#include "Base58.h"
+#include "Bech32.h"
+#include "Int.h"
+#include "IntGroup.h"
+#include "Bloom.h"
 
 // Search modes
 #define SEARCH_COMPRESSED 0
@@ -98,11 +103,9 @@ private:
 	uint64_t getGPUCount();
 	bool isAlive(TH_PARAM* p);
 	bool hasStarted(TH_PARAM* p);
-	std::string GetHex(std::vector<unsigned char>& buffer);
+	std::string GetHex(std::vector<uint8_t>& buffer);
 	int CheckBloomBinary(const uint8_t* hash);
 	void SetupRanges(uint32_t totalThreads);
-	std::string GetHex(std::vector<std::uint8_t>& buffer);
-	int CheckBloomBinary(const uint8_t* hash);
 
 	// Range variables
 	Int rangeStart;
@@ -110,21 +113,17 @@ private:
 	Int rangeSize;
 	Int rangeDiff;
 	Int rangeDiff2;
-
-	// Hash and counters
 	uint32_t hash160[5];
 	uint64_t counters[256];
 	uint64_t counters2[256];
 
-	// Search configuration
-	int searchMode;
-	int searchType;
-	bool useGpu;
-	bool useSSE;
-	bool endOfSearch;
-	uint32_t maxFound;
-	int nbGPUThread;
-	bool& should_exit;
+	// Bloom filter variables
+	bool* BloomTable;
+	uint64_t BLOOM_SIZE;
+	uint64_t BLOOM_BITS;
+	uint8_t BLOOM_HASHES;
+	uint8_t* DATA;
+	uint64_t TOTAL_ADDR;
 	Bloom* bloom;
 
 	// File and address handling
@@ -139,7 +138,7 @@ private:
 	int searchType;
 	bool useGpu;
 	bool useSSE;
-	bool* endOfSearch;
+	bool endOfSearch;
 	uint32_t maxFound;
 	int nbGPUThread;
 	bool& should_exit;
@@ -147,25 +146,6 @@ private:
 	// Threading and timing
 	pthread_mutex_t ghMutex;
 	double startTime;
-	uint8_t BLOOM_HASHES;
-	uint8_t* DATA;
-	uint64_t TOTAL_ADDR;
-
-	// File and address handling
-	std::string addressFile;
-	std::vector<unsigned char> addressHash;
-	std::string outputFile;
-	FILE* rKey;
-
-	// Search configuration
-	int searchMode;
-	int searchType;
-	bool useGpu;
-	bool useSSE;
-	bool* endOfSearch;
-	uint32_t maxFound;
-	int nbGPUThread;
-	bool& should_exit;
 
 };
 
