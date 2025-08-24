@@ -656,17 +656,17 @@ void KeyHunt::getGPUStartingKeys(int thId, Int & tRangeStart, Int & tRangeEnd, i
 
 
 		if (i < rangeShowThreasold) {
-			printf("GPU %d Thread %06d: %s : %s\n", (thId - 0x80L), i, tRangeStart2.GetBase16().c_str(), tRangeEnd2.GetBase16().c_str());
+			printf("GPU %ld Thread %06d: %s : %s\n", (thId - 0x80L), i, tRangeStart2.GetBase16().c_str(), tRangeEnd2.GetBase16().c_str());
 		}
 		else if (rangeShowCounter < 1) {
 			printf("                   .\n");
 			rangeShowCounter++;
 			if (i + 1 == nbThread) {
-				printf("GPU %d Thread %06d: %s : %s\n", (thId - 0x80L), i, tRangeStart2.GetBase16().c_str(), tRangeEnd2.GetBase16().c_str());
+				printf("GPU %ld Thread %06d: %s : %s\n", (thId - 0x80L), i, tRangeStart2.GetBase16().c_str(), tRangeEnd2.GetBase16().c_str());
 			}
 		}
 		else if (i + 1 == nbThread) {
-			printf("GPU %d Thread %06d: %s : %s\n", (thId - 0x80L), i, tRangeStart2.GetBase16().c_str(), tRangeEnd2.GetBase16().c_str());
+			printf("GPU %ld Thread %06d: %s : %s\n", (thId - 0x80L), i, tRangeStart2.GetBase16().c_str(), tRangeEnd2.GetBase16().c_str());
 		}
 
 		tRangeStart2.Add(&tRangeDiff);
@@ -830,17 +830,6 @@ bool KeyHunt::isAlive(TH_PARAM* p)
 	return alive;
 }
 
-
-void KeyHunt::SetupRanges(uint32_t totalThreads)
-{
-	Int threads;
-	threads.SetInt32(totalThreads);
-	rangeDiff.Set(&rangeEnd);
-	rangeDiff.Sub(&rangeStart);
-	rangeDiff.Div(&threads);
-}
-
-// ----------------------------------------------------------------------------
 
 void KeyHunt::Search(int nbThread, std::vector<int> gpuId, std::vector<int> gridSize, bool& should_exit)
 {

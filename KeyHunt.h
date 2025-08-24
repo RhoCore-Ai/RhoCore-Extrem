@@ -87,6 +87,45 @@ typedef struct TH_PARAM {
   uint32_t collisionSize16;
   uint32_t collisionSize17;
   uint32_t collisionSize18;
+// Thread parameters structure
+class KeyHunt;  // Forward declaration
+
+typedef struct TH_PARAM {
+  int  threadId;
+  int  gridSizeX;
+  int  gridSizeY;
+  int  gpuId;
+  bool isAlive;
+  bool hasStarted;
+  bool isRunning;
+  bool completed;
+  uint64_t startKey;
+  uint64_t endKey;
+  uint64_t keysPerThread;
+  uint64_t keysToSearch;
+  Int rangeStart;
+  Int rangeEnd;
+  uint64_t keysSearched;
+  uint64_t keysFound;
+  uint32_t collisionOffset;
+  uint32_t collisionSize;
+  uint32_t collisionSize2;
+  uint32_t collisionSize3;
+  uint32_t collisionSize4;
+  uint32_t collisionSize5;
+  uint32_t collisionSize6;
+  uint32_t collisionSize7;
+  uint32_t collisionSize8;
+  uint32_t collisionSize9;
+  uint32_t collisionSize10;
+  uint32_t collisionSize11;
+  uint32_t collisionSize12;
+  uint32_t collisionSize13;
+  uint32_t collisionSize14;
+  uint32_t collisionSize15;
+  uint32_t collisionSize16;
+  uint32_t collisionSize17;
+  uint32_t collisionSize18;
   uint32_t collisionSize19;
   uint32_t collisionSize20;
   KeyHunt* obj;
@@ -121,10 +160,7 @@ private:
 	bool MatchHash160(uint32_t* _h);
 	std::string formatThousands(uint64_t x);
 	char* toTimeStr(int sec, char* timeStr);
-	bool isInsideRange(Int& key);
-	bool MatchHash160(uint32_t* _h);
-	std::string formatThousands(uint64_t x);
-	char* toTimeStr(int sec, char* timeStr);
+
 	// Range variables
 	Int rangeStart;
 	Int rangeEnd;
@@ -148,46 +184,7 @@ private:
 	Bloom* bloom;
 
 	// Thread parameters structure
-	typedef struct TH_PARAM {
-		int  threadId;
-		int  gridSizeX;
-		int  gridSizeY;
-		int  gpuId;
-		bool isAlive;
-		bool hasStarted;
-		bool isRunning;
-		bool completed;
-		uint64_t startKey;
-		uint64_t endKey;
-		uint64_t keysPerThread;
-		uint64_t keysToSearch;
-		Int rangeStart;
-		Int rangeEnd;
-		uint64_t keysSearched;
-		uint64_t keysFound;
-		uint32_t collisionOffset;
-		uint32_t collisionSize;
-		uint32_t collisionSize2;
-		uint32_t collisionSize3;
-		uint32_t collisionSize4;
-		uint32_t collisionSize5;
-		uint32_t collisionSize6;
-		uint32_t collisionSize7;
-		uint32_t collisionSize8;
-		uint32_t collisionSize9;
-		uint32_t collisionSize10;
-		uint32_t collisionSize11;
-		uint32_t collisionSize12;
-		uint32_t collisionSize13;
-		uint32_t collisionSize14;
-		uint32_t collisionSize15;
-		uint32_t collisionSize16;
-		uint32_t collisionSize17;
-		uint32_t collisionSize18;
-		uint32_t collisionSize19;
-		uint32_t collisionSize20;
-		KeyHunt* obj;
-	} TH_PARAM;
+
 
 	// File and address handling
 	std::string addressFile;
