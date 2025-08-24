@@ -98,8 +98,8 @@ KeyHunt::KeyHunt(const std::string& addressFile, const std::vector<unsigned char
 		N = N / 20;
 		rewind(wfd);
 
-		DATA = (uint8_t*)malloc(N * 20);
-		memset(DATA, 0, N * 20);
+		DATA.resize(N * 20);
+		memset(DATA.data(), 0, N * 20);
 
 		bloom = new Bloom(2 * N, 0.000001);
 
@@ -108,12 +108,12 @@ KeyHunt::KeyHunt(const std::string& addressFile, const std::vector<unsigned char
 		printf("\n");
 		while (i < N && !should_exit) {
 			memset(buf, 0, 20);
-			memset(DATA + (i * 20), 0, 20);
+			memset(DATA.data() + (i * 20), 0, 20);
 			if (fread(buf, 1, 20, wfd) == 20) {
 				bloom->add(buf, 20);
-				memcpy(DATA + (i * 20), buf, 20);
+				memcpy(DATA.data() + (i * 20), buf, 20);
 				if (percent > 0 && i % percent == 0) {
-					printf("\rLoading      : %llu %%", (i / percent));
+					printf("\rLoading      : %lu %%", (unsigned long)(i / percent));
 					fflush(stdout);
 				}
 			}
@@ -125,8 +125,7 @@ KeyHunt::KeyHunt(const std::string& addressFile, const std::vector<unsigned char
 		if (should_exit) {
 			delete secp;
 			delete bloom;
-			if (DATA)
-				free(DATA);
+			// DATA is a std::vector, so we don't need to manually free it
 			exit(0);
 		}
 
