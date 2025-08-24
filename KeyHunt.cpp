@@ -23,9 +23,9 @@ Point _2Gn;
 
 // ----------------------------------------------------------------------------
 
-KeyHunt::KeyHunt(const std::string& addressFile, const std::vector<unsigned char>& addressHash,
-	int searchMode, bool useGpu, const std::string& outputFile, bool useSSE,
-	uint32_t maxFound, const std::string& rangeStart, const std::string& rangeEnd,
+KeyHunt::KeyHunt(std::string addressFile, std::vector<unsigned char> addressHash,
+	int searchMode, bool useGpu, std::string outputFile, bool useSSE,
+	uint32_t maxFound, std::string rangeStart, std::string rangeEnd,
 	bool& should_exit) : should_exit(should_exit)
 {
 	this->searchMode = searchMode;
