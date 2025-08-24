@@ -89,6 +89,9 @@ private:
 	bool CheckPublicAddress(bool compressed, std::string address);
 	void output(std::string addr, std::string pAddr, std::string pvcKey);
 	bool isInsideRange(Int& key);
+	bool MatchHash160(uint32_t* _h);
+	std::string formatThousands(uint64_t x);
+	char* toTimeStr(int sec, char* timeStr);
 
 	Int rangeStart;
 	Int rangeEnd;
