@@ -6,6 +6,8 @@
 #ifndef CUDA_CONFIG_H
 #define CUDA_CONFIG_H
 
+#include <cstddef>  // Add this for size_t
+
 // CUDA Version Check
 #if CUDART_VERSION >= 12000
 #define CUDA_12_OR_LATER 1
