@@ -40,7 +40,7 @@ const char* fstr = "Ripemd160 binary hash file path                             
 const char* astr = "P2PKH Address (single address mode)                                                             ";
 
 const char* pstr = "Range start in hex                                                                              ";
-const char* qstr = "Range end in hex, if not provided then, endRange would be: startRange + 10000000000000000       ";
+const char* qstr = "Range end in hex, if not provided then, endRange would be set to the maximum value for secp256k1 curve";
 
 // ----------------------------------------------------------------------------
 // ----------------------------------------------------------------------------
@@ -296,7 +296,9 @@ int main(int argc, const char* argv[])
 	}
 
 	if (rangeStart.length() <= 0) {
-		printf("Invalid rangeStart argument, please provide start range at least, endRange would be: startRange + 10000000000000000\n");
+		printf("Error: Start range must be provided.\n");
+		printf("Example: -s 80000000 or --start 80000000\n");
+		printf("For maximum range: -s 1\n");
 		exit(-1);
 	}
 

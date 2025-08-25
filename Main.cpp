@@ -19,6 +19,7 @@
 #include "KeyHunt.h"
 #include "Base58.h"
 #include "ArgParse.h"
+#include "Int.h"
 #include <fstream>
 #include <string>
 #include <string.h>
@@ -62,7 +63,7 @@ const char* fstr = "Ripemd160 binary hash file path                             
 const char* astr = "P2PKH Address (single address mode)                                                             ";
 
 const char* pstr = "Range start in hex                                                                              ";
-const char* qstr = "Range end in hex, if not provided then, endRange would be: startRange + 10000000000000000       ";
+const char* qstr = "Range end in hex, if not provided then, endRange would be set to the maximum value for secp256k1 curve";
 
 // ----------------------------------------------------------------------------
 // ----------------------------------------------------------------------------
@@ -288,10 +289,36 @@ int main(int argc, const char* argv[])
 
 	if (parser.exists("start")) {
 		rangeStart = parser.get<string>("s");
+		// Validate that rangeStart is a valid hex string
+		for (char c : rangeStart) {
+			if (!((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F'))) {
+				printf("Error: Invalid character '%c' in start range. Must be valid hex.\n", c);
+				exit(-1);
+			}
+		}
 	}
 
 	if (parser.exists("end")) {
 		rangeEnd = parser.get<string>("e");
+		// Validate that rangeEnd is a valid hex string
+		for (char c : rangeEnd) {
+			if (!((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F'))) {
+				printf("Error: Invalid character '%c' in end range. Must be valid hex.\n", c);
+				exit(-1);
+			}
+		}
+	}
+
+	// Validate that if both ranges are provided, end is not smaller than start
+	if (rangeStart.length() > 0 && rangeEnd.length() > 0) {
+		Int startInt, endInt;
+		startInt.SetBase16(rangeStart.c_str());
+		endInt.SetBase16(rangeEnd.c_str());
+
+		if (!endInt.IsGreaterOrEqual(&startInt)) {
+			printf("Error: End range (%s) is smaller than start range (%s)\n", rangeEnd.c_str(), rangeStart.c_str());
+			exit(-1);
+		}
 	}
 
 
@@ -318,7 +345,9 @@ int main(int argc, const char* argv[])
 	}
 
 	if (rangeStart.length() <= 0) {
-		printf("Invalid rangeStart argument, please provide start range at least, endRange would be: startRange + 10000000000000000\n");
+		printf("Error: Start range must be provided.\n");
+		printf("Example: -s 80000000 or --start 80000000\n");
+		printf("For maximum range: -s 1\n");
 		exit(-1);
 	}
 

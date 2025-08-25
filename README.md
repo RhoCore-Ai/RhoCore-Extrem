@@ -65,16 +65,19 @@ Options:
     -f, --file             Ripemd160 binary hash file path
     -a, --addr             P2PKH Address (single address mode)
     -s, --start            Range start in hex
-    -e, --end              Range end in hex, if not provided then, endRange would be: startRange + 10000000000000000
+    -e, --end              Range end in hex, if not provided then endRange is set to startRange + STEP_SIZE, or to the maximum value for secp256k1 curve if range exceeds curve order
 ```
 
 ## Examples
 ```bash
 # Single Address Mode with 8 GPUs:
-./Rhocore-extrem -g -i 0,1,2,3,4,5,6,7 -s 1 -e 10000000000 -a 1YourTargetAddressHere
+./Rhocore-extrem -g -i 0,1,2,3,4,5,6,7 -s 1 -a 1YourTargetAddressHere
 
 # File Mode with 8 GPUs:
-./Rhocore-extrem -g -i 0,1,2,3,4,5,6,7 -s 1 -e 10000000000 -f path/to/hashes.bin
+./Rhocore-extrem -g -i 0,1,2,3,4,5,6,7 -s 1 -f path/to/hashes.bin
+
+# With specific range:
+./Rhocore-extrem -g -i 0,1,2,3,4,5,6,7 -s 80000000 -e 10000000000 -a 1YourTargetAddressHere
 ```
 
 ## Compilation Options
