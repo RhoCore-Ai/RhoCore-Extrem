@@ -42,7 +42,7 @@ KeyHunt::KeyHunt(std::string addressFile, std::vector<unsigned char> addressHash
 	this->rangeStart.SetBase16(rangeStart.c_str());
 	if (rangeEnd.length() <= 0) {
 		// When no end range is provided, set it to the maximum value for secp256k1
-		this->rangeEnd.SetBase16("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141");
+		this->rangeEnd.SetBase16("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364140");
 	} else {
 		this->rangeEnd.SetBase16(rangeEnd.c_str());
 		// Check if end range is valid (greater than or equal to start range)
@@ -56,7 +56,7 @@ KeyHunt::KeyHunt(std::string addressFile, std::vector<unsigned char> addressHash
 
 	// Additional validation: Check if ranges are within secp256k1 bounds
 	Int secp256k1Max;
-	secp256k1Max.SetBase16("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141");
+	secp256k1Max.SetBase16("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364140");
 	if (!this->rangeStart.IsLowerOrEqual(&secp256k1Max) ||
 		!this->rangeEnd.IsLowerOrEqual(&secp256k1Max)) {
 		printf("Error: Range values exceed secp256k1 maximum value\n");
